@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b8413na17kimw" path="res://Textures/block.png" id="1_fs5lw"]
 
 [resource]
+shading_mode = 2
 albedo_texture = ExtResource("1_fs5lw")
 metallic_specular = 0.0
 roughness = 0.0

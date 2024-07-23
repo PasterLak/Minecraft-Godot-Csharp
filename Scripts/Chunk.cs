@@ -1,9 +1,6 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using MyCraft.Scripts;
-
-
 
 public partial class Chunk : MeshInstance3D
 {
@@ -14,13 +11,13 @@ public partial class Chunk : MeshInstance3D
    
     private Texture2D texture;
 
-    [Export] private CollisionShape3D shape;
+    [Export] private CollisionShape3D collisionShape;
     [Export]
-    private Color color = new Color(0.9f, 0.1f, 0.1f);
+    private Color color = new Color(1f, 1f, 1f);
     
     private ArrayMesh tmpMesh = new ArrayMesh();
 
-    [Export]
+   
     private StandardMaterial3D material;
 
     private List<Vector3> _vertices;
@@ -29,9 +26,20 @@ public partial class Chunk : MeshInstance3D
 
     private Block[,,] _blocks;
 
-    private void CreateData()
-    {
+    private Vector3I _chunkWorldPosition = Vector3I.Zero;
+    private Vector2I _chunkLocalPosition = Vector2I.Zero;
+    private Sector _sector;
+    
+    FastNoiseLite noise = new FastNoiseLite();
 
+    public void SetCollisionShape(CollisionShape3D shape)
+    {
+        collisionShape = shape;
+    }
+
+    private void Initialize()
+    {
+        material = ResourceLoader.Load<StandardMaterial3D>("res://" + "Materials/world_MAT.tres");
         _vertices = new List<Vector3>();
         _uvs = new List<Vector2>();
         _indices = new List<int>();
@@ -39,9 +47,14 @@ public partial class Chunk : MeshInstance3D
         _blocks = new Block[ChunkXZ, ChunkHeight, ChunkXZ];
         
         texture = TexturesAtlas.GetBlocksTexture();
+
+        //noise.Frequency = 0;
+        noise.Seed = 48;
+        noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin;
+        //noise.FractalOctaves = 5;
     }
 
-    private void CreateSidesData()
+      private void CreateSidesData()
     {
         for (int x = 0; x < ChunkXZ; x++)
         {
@@ -61,12 +74,14 @@ public partial class Chunk : MeshInstance3D
                     if (x == 0)
                     {
                         if (_blocks[x + 1, y, z] == null) _blocks[x, y, z].Sides += 8;
+                        if(!_sector.ChunkExists(_chunkLocalPosition - new Vector2I(1,0)))
                         _blocks[x, y, z].Sides += 2;
                     }
 
                     if (x == ChunkXZ - 1)
                     {
                         if (_blocks[x - 1, y, z] == null) _blocks[x, y, z].Sides += 2;
+                        if(!_sector.ChunkExists(_chunkLocalPosition + new Vector2I(1,0)))
                         _blocks[x, y, z].Sides += 8;
                     }
                     
@@ -79,12 +94,14 @@ public partial class Chunk : MeshInstance3D
                     if (y == 0)
                     {
                         if (_blocks[x, y+1, z] == null) _blocks[x, y, z].Sides += 16;
+                       
                         _blocks[x, y, z].Sides += 32;
                     }
 
                     if (y == ChunkHeight - 1)
                     {
                         if (_blocks[x, y-1, z] == null) _blocks[x, y, z].Sides += 32;
+                      
                         _blocks[x, y, z].Sides += 16;
                     }
                     if (z > 0 && z < ChunkXZ - 1)
@@ -96,18 +113,21 @@ public partial class Chunk : MeshInstance3D
                     if (z == 0)
                     {
                         if (_blocks[x, y, z+1] == null) _blocks[x, y, z].Sides += 1;
+                        if(!_sector.ChunkExists(_chunkLocalPosition - new Vector2I(0,1)))
                         _blocks[x, y, z].Sides += 4;
                     }
 
                     if (z == ChunkXZ - 1)
                     {
                         if (_blocks[x, y, z-1] == null) _blocks[x, y, z].Sides += 4;
+                        if(!_sector.ChunkExists(_chunkLocalPosition + new Vector2I(0,1)))
                         _blocks[x, y, z].Sides += 1;
                     }
                 }
             }
         }
     }
+
 
     private void CreateBlocksData()
     {
@@ -117,6 +137,7 @@ public partial class Chunk : MeshInstance3D
             {
                 for (int z = 0; z < ChunkXZ; z++)
                 {
+
                     Vector2Byte blockCoord = new Vector2Byte(4, 3);
 
                     if (y == ChunkHeight - 1) blockCoord = new Vector2Byte(3,3);
@@ -126,6 +147,7 @@ public partial class Chunk : MeshInstance3D
                     if(y < 10 && y > 0)
                         blockCoord = new Vector2Byte(4,0);
 
+                    
                     _blocks[x, y, z] = new Block(blockCoord);
                 }
             }
@@ -144,7 +166,7 @@ public partial class Chunk : MeshInstance3D
 
                     if(_blocks[x, y, z] == null) continue;
                     
-                    CreateSides(new Vector3I(x,y,z), _blocks[x,y,z].Sides, ref _blocks[x, y, z].TextureCoord);
+                    CreateSides(new Vector3I(x,y,z) + _chunkWorldPosition, _blocks[x,y,z].Sides, ref _blocks[x, y, z].TextureCoord);
                 }
             }
         }
@@ -253,9 +275,13 @@ public partial class Chunk : MeshInstance3D
     }
     
     
-    public override void _Ready()
+    public void Generate(Vector3I worldPosition, Vector2I localPosition, Sector sector)
     {
-        CreateData();
+        _chunkWorldPosition = worldPosition;
+        _sector = sector;
+        _chunkLocalPosition = localPosition;
+        
+        Initialize();
         CreateBlocksData();
         CreateSidesData();
         CreateBlocks();
@@ -283,7 +309,7 @@ public partial class Chunk : MeshInstance3D
 
         base.Mesh = tmpMesh;
 
-        //CreateCollisionShape();
+        CreateCollisionShape();
       
         GD.Print("Chunk was created!");
     }
@@ -293,7 +319,7 @@ public partial class Chunk : MeshInstance3D
         // Create a shape that matches the mesh
         var concavePolygonShape3D = new ConvexPolygonShape3D();
         concavePolygonShape3D.Points = _vertices.ToArray();
-        shape.Shape = concavePolygonShape3D;
+        collisionShape.Shape = concavePolygonShape3D;
     }
     
     

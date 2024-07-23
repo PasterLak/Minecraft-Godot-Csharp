@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://2e1g6t06jf23"]
+
+[ext_resource type="Material" uid="uid://c103jmahdo7jw" path="res://Materials/select_MAT.tres" id="1_dfebj"]
+
+[node name="Selector" type="Node3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1.05, 0, 0, 0, 1.05, 0, 0, 0, 1.05, 0.5, 0.5, 0.5)
+material_override = ExtResource("1_dfebj")
