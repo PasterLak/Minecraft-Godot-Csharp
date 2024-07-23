@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://2l2niuoond38"]
+[gd_scene load_steps=10 format=3 uid="uid://2l2niuoond38"]
 
 [ext_resource type="Script" path="res://Scripts/CreateBlock.cs" id="1_hbllf"]
 [ext_resource type="Script" path="res://Scripts/WorldManager.cs" id="1_spriy"]
 [ext_resource type="Texture2D" uid="uid://b8413na17kimw" path="res://Textures/block.png" id="2_rrtbc"]
 [ext_resource type="Script" path="res://Scripts/FreeLookCamera/FreeLookCamera.cs" id="3_rgdtb"]
 [ext_resource type="Environment" uid="uid://buj8vljyd8rhq" path="res://Resources/environment.tres" id="4_0na3h"]
-[ext_resource type="Material" uid="uid://dmdijwm5hk8e8" path="res://world_MAT.tres" id="4_nxa57"]
-[ext_resource type="Material" uid="uid://d1segssp04ccu" path="res://red.tres" id="6_06ps4"]
+[ext_resource type="Material" uid="uid://dmdijwm5hk8e8" path="res://Materials/world_MAT.tres" id="4_nxa57"]
+[ext_resource type="Material" uid="uid://d1segssp04ccu" path="res://Materials/red.tres" id="6_06ps4"]
+[ext_resource type="PackedScene" uid="uid://25uu2cuev2wd" path="res://Prefabs/playerUI.tscn" id="8_wq554"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_omix0"]
 
@@ -14,7 +15,7 @@
 script = ExtResource("1_spriy")
 
 [node name="Player" type="Camera3D" parent="."]
-transform = Transform3D(0.666666, -0.303644, 0.680703, 0.0643365, 0.933292, 0.353308, -0.742575, -0.191744, 0.64173, -33.1164, 15.5506, 5.38996)
+transform = Transform3D(0.154131, 0.00171971, -0.988049, -0.000229067, 0.999999, 0.00170477, 0.98805, -3.64287e-05, 0.154131, -21.4172, 15.5506, 5.38996)
 script = ExtResource("3_rgdtb")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
@@ -62,3 +63,5 @@ color = Color(1, 1, 1, 1)
 material = ExtResource("4_nxa57")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Chunk"]
+
+[node name="Control" parent="." instance=ExtResource("8_wq554")]
