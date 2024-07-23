@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://25uu2cuev2wd"]
+[gd_scene load_steps=3 format=3 uid="uid://25uu2cuev2wd"]
 
 [ext_resource type="Texture2D" uid="uid://tqufi18b3yed" path="res://Textures/UI/crosshair.png" id="1_3oyac"]
+[ext_resource type="Script" path="res://Scripts/DebugLabel.cs" id="2_k0gon"]
 
-[node name="Control" type="Control"]
+[node name="PlayerUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,3 +26,14 @@ offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_3oyac")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.123
+anchor_bottom = 0.066
+offset_right = 0.304001
+offset_bottom = 0.231998
+text = "0"
+script = ExtResource("2_k0gon")
+_updateFrequencySec = 0.5
