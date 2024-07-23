@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://2l2niuoond38"]
+
+[ext_resource type="Script" path="res://Scripts/CreateBlock.cs" id="1_hbllf"]
+[ext_resource type="Texture2D" uid="uid://b8413na17kimw" path="res://Textures/block.png" id="2_rrtbc"]
+[ext_resource type="Script" path="res://Scripts/FreeLookCamera/FreeLookCamera.cs" id="3_rgdtb"]
+[ext_resource type="Environment" uid="uid://buj8vljyd8rhq" path="res://Resources/environment.tres" id="4_0na3h"]
+
+[node name="World" type="Node3D"]
+
+[node name="Block" type="MeshInstance3D" parent="."]
+script = ExtResource("1_hbllf")
+texture = ExtResource("2_rrtbc")
+color = Color(1, 1, 1, 1)
+
+[node name="Player" type="Camera3D" parent="."]
+transform = Transform3D(0.775706, -0.177651, 0.605574, -0.00969399, 0.956095, 0.292896, -0.63102, -0.233072, 0.739927, 1.73909, 0.633329, 1.6679)
+script = ExtResource("3_rgdtb")
+
+[node name="Center" type="CSGBox3D" parent="."]
+transform = Transform3D(0.278552, 0, 0, 0, 0.278552, 0, 0, 0, 0.278552, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("4_0na3h")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.79415, 0.607722, 0, -0.607722, 0.79415, 0, 0, 0)
