@@ -1,11 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://2l2niuoond38"]
+[gd_scene load_steps=9 format=3 uid="uid://2l2niuoond38"]
 
-[ext_resource type="Script" path="res://Scripts/CreateBlock.cs" id="1_hbllf"]
 [ext_resource type="Script" path="res://Scripts/WorldManager.cs" id="1_spriy"]
-[ext_resource type="Texture2D" uid="uid://b8413na17kimw" path="res://Textures/block.png" id="2_rrtbc"]
 [ext_resource type="Script" path="res://Scripts/FreeLookCamera/FreeLookCamera.cs" id="3_rgdtb"]
 [ext_resource type="Environment" uid="uid://buj8vljyd8rhq" path="res://Resources/environment.tres" id="4_0na3h"]
 [ext_resource type="Material" uid="uid://dmdijwm5hk8e8" path="res://Materials/world_MAT.tres" id="4_nxa57"]
+[ext_resource type="Script" path="res://Scripts/Chunk.cs" id="5_2638i"]
 [ext_resource type="Material" uid="uid://d1segssp04ccu" path="res://Materials/red.tres" id="6_06ps4"]
 [ext_resource type="PackedScene" uid="uid://25uu2cuev2wd" path="res://Prefabs/playerUI.tscn" id="8_wq554"]
 
@@ -13,6 +12,7 @@
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_spriy")
+metadata/_edit_vertical_guides_ = [489.0]
 
 [node name="Player" type="Camera3D" parent="."]
 transform = Transform3D(0.154131, 0.00171971, -0.988049, -0.000229067, 0.999999, 0.00170477, 0.98805, -3.64287e-05, 0.154131, -21.4172, 15.5506, 5.38996)
@@ -56,8 +56,7 @@ directional_shadow_mode = 1
 
 [node name="Block" type="MeshInstance3D" parent="Chunk" node_paths=PackedStringArray("shape")]
 skeleton = NodePath("../..")
-script = ExtResource("1_hbllf")
-texture = ExtResource("2_rrtbc")
+script = ExtResource("5_2638i")
 shape = NodePath("../CollisionShape3D")
 color = Color(1, 1, 1, 1)
 material = ExtResource("4_nxa57")
