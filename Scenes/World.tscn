@@ -1,26 +1,64 @@
-[gd_scene load_steps=5 format=3 uid="uid://2l2niuoond38"]
+[gd_scene load_steps=9 format=3 uid="uid://2l2niuoond38"]
 
 [ext_resource type="Script" path="res://Scripts/CreateBlock.cs" id="1_hbllf"]
+[ext_resource type="Script" path="res://Scripts/WorldManager.cs" id="1_spriy"]
 [ext_resource type="Texture2D" uid="uid://b8413na17kimw" path="res://Textures/block.png" id="2_rrtbc"]
 [ext_resource type="Script" path="res://Scripts/FreeLookCamera/FreeLookCamera.cs" id="3_rgdtb"]
 [ext_resource type="Environment" uid="uid://buj8vljyd8rhq" path="res://Resources/environment.tres" id="4_0na3h"]
+[ext_resource type="Material" uid="uid://dmdijwm5hk8e8" path="res://world_MAT.tres" id="4_nxa57"]
+[ext_resource type="Material" uid="uid://d1segssp04ccu" path="res://red.tres" id="6_06ps4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_omix0"]
 
 [node name="World" type="Node3D"]
-
-[node name="Block" type="MeshInstance3D" parent="."]
-script = ExtResource("1_hbllf")
-texture = ExtResource("2_rrtbc")
-color = Color(1, 1, 1, 1)
+script = ExtResource("1_spriy")
 
 [node name="Player" type="Camera3D" parent="."]
-transform = Transform3D(0.775706, -0.177651, 0.605574, -0.00969399, 0.956095, 0.292896, -0.63102, -0.233072, 0.739927, 1.73909, 0.633329, 1.6679)
+transform = Transform3D(0.666666, -0.303644, 0.680703, 0.0643365, 0.933292, 0.353308, -0.742575, -0.191744, 0.64173, -33.1164, 15.5506, 5.38996)
 script = ExtResource("3_rgdtb")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.724038, 15, 0.613829)
+
+[node name="Center2" type="CSGBox3D" parent="RigidBody3D"]
+transform = Transform3D(0.278552, 0, 0, 0, 0.278552, 0, 0, 0, 0.278552, 0, 0, 0)
+material_override = ExtResource("6_06ps4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(0.289717, 0, 0, 0, 0.289717, 0, 0, 0, 0.289717, 0, 0, 0)
+shape = SubResource("BoxShape3D_omix0")
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.54766, 15, 1.49184)
+
+[node name="Center2" type="CSGBox3D" parent="RigidBody3D2"]
+transform = Transform3D(0.278552, 0, 0, 0, 0.278552, 0, 0, 0, 0.278552, 0, 0, 0)
+material_override = ExtResource("6_06ps4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
+transform = Transform3D(0.289717, 0, 0, 0, 0.289717, 0, 0, 0, 0.289717, 0, 0, 0)
+shape = SubResource("BoxShape3D_omix0")
 
 [node name="Center" type="CSGBox3D" parent="."]
 transform = Transform3D(0.278552, 0, 0, 0, 0.278552, 0, 0, 0, 0.278552, 0, 0, 0)
+material_override = ExtResource("6_06ps4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("4_0na3h")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.79415, 0.607722, 0, -0.607722, 0.79415, 0, 0, 0)
+light_color = Color(1, 1, 0.92549, 1)
+directional_shadow_mode = 1
+
+[node name="Chunk" type="StaticBody3D" parent="."]
+
+[node name="Block" type="MeshInstance3D" parent="Chunk" node_paths=PackedStringArray("shape")]
+skeleton = NodePath("../..")
+script = ExtResource("1_hbllf")
+texture = ExtResource("2_rrtbc")
+shape = NodePath("../CollisionShape3D")
+color = Color(1, 1, 1, 1)
+material = ExtResource("4_nxa57")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Chunk"]

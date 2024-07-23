@@ -1,3 +1,11 @@
-[gd_resource type="Environment" format=3 uid="uid://buj8vljyd8rhq"]
+[gd_resource type="Environment" load_steps=2 format=3 uid="uid://buj8vljyd8rhq"]
+
+[sub_resource type="Sky" id="Sky_xmenp"]
 
 [resource]
+background_mode = 1
+background_color = Color(0.357461, 0.430077, 0.544953, 1)
+sky = SubResource("Sky_xmenp")
+ambient_light_source = 2
+ambient_light_color = Color(0.95354, 0.869873, 0.735506, 1)
+ssao_enabled = true
